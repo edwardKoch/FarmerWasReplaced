@@ -8,3 +8,12 @@ def plant_(entity):
 			till()
 
 	plant(entity)
+
+def plantTreeBush_(x, y):
+	toPlant = Entities.Bush
+	if y % 2 == 0 and x % 2 == 0:
+		toPlant = Entities.Tree
+	elif y % 2 == 1 and x % 2 == 1:
+		toPlant = Entities.Tree
+
+	plant_(toPlant)
