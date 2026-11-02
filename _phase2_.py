@@ -1,117 +1,100 @@
 from _move_ import *
 from _plant_ import *
+from _farm_ import *
 from _pumpkins_ import *
+from _unlocks_ import *
 
-moveTo((0,0))
+resetFarm()
 
 ####################
 # Phase 2
-# Unlock Polyculture & Cacti
+# Unlock Polyculture & Cacti & Mazes
 # Uses quadrant farming for Pumpkin Maxing, ignore sunflowers until Polyculture
 ####################
 
-entities = [Entities.Bush, Entities.Grass, Entities.Carrot, Entities.Pumpkin]
-
-# Till the entire Farm - everything grows on soil
-for x in range(get_world_size()):
-	for y in range(get_world_size()):
-
-		if get_ground_type() != Grounds.Soil:
-			till()
-		
-		move(North)
-	move(East)
-
-
 # Assign entities to a plot of land
 entities = [Entities.Bush, Entities.Grass, Entities.Carrot, Entities.Pumpkin]
-# TODO replace with dictionary
-PLOTS = []
 
-# Add a list of coordinates for each entity
-def assignEntities():
-	for ent in entities:
-		PLOTS.append([])
 
-	dim = get_world_size()
-	half = dim // 2
-	for x in range(dim):
-		for y in range(dim):
+PLOTS = assignEntitiesToQuads(entities)
 
-			# Calculate the quadrant
-			if x < half:
-				if y < half:
-					quad = 0
-				else:
-					quad = 1
-
-			elif y >= half:
-				quad = 3
-			else:
-				quad = 2
-			if can_harvest():
-				harvest()
-
-			PLOTS[quad].append((x,y))
-
-assignEntities()
-
-# Goal for Phase 2 is to unlock Polyculture & Cacti
+# First Goal for Phase 2 is to unlock Polyculture & Cacti
 unlocked = 0
 while num_unlocked(Unlocks.Polyculture) == 0 or num_unlocked(Unlocks.Cactus) == 0:
-	# Unlock Speeds along the way
-	if num_items(Items.Wood) > 20:
-		# TODO Unlock Speed 2
-		pass
 
-	# Unlock FarmSize along the way
-	if num_items(Items.Pumpkin) > 1000:
-		# TODO Unlock Speed 2
-		assignEntities()
-		pass
+	# Unlock Speed & Expand along the way
+	checkAndUnlock(Unlocks.Speed)
+	if checkAndUnlock(Unlocks.Expand):
+		PLOTS = assignEntitiesToQuads(entities)
 
-    # Unlock Yield along the way
-	# TODO Check Grass
-	# TODO Check Carrots
-	# TODO Check Trees
+	# Unlock Yield along the way
+	checkAndUnlock(Unlocks.Watering)
+	checkAndUnlock(Unlocks.Grass)
+	checkAndUnlock(Unlocks.Carrots)
+	checkAndUnlock(Unlocks.Trees)
+	checkAndUnlock(Unlocks.Pumpkins)
 
 	# Unlock Polyculture when we can
-	if num_items(Items.Pumpkin) > 3000:
-		# TODO Unlock Polyculture
-		unlocked += 1
+	checkAndUnlock(Unlocks.Polyculture)
 
 	# Unlock Cacti when we can
-	if num_items(Items.Pumpkin) > 5000:
-		# TODO Unlock Cactus
-		unlocked += 1
+	checkAndUnlock(Unlocks.Cactus)
 
-	dim = get_world_size()
-	half = dim // 2
-	for x in range(dim):
-		for y in range(dim):
+	for toPlant in PLOTS:
+		if toPlant == Entities.Pumpkin:
+			processPumpkinPlot(PLOTS[toPlant])
 
-			moveTo((x, y))
-			# Calculate the quadrant
-			if x < half:
-				if y < half:
-					quad = 0
-				else:
-					quad = 1
+		else:
+			plantPlot_(toPlant, PLOTS[toPlant])
 
-			elif y >= half:
-				quad = 3
-			else:
-				quad = 2
+# Second Goal for Phase 2 is to unlock Mazes - need Fertilizer first
+while num_unlocked(Unlocks.Fertilizer) == 0:
+	# Unlock Fertilizer when we can
+	checkAndUnlock(Unlocks.Fertilizer)
+
+	for toPlant in PLOTS:
+		if toPlant == Entities.Pumpkin:
+			processPumpkinPlot(PLOTS[toPlant])
+
+		else:
+			plantPlot_(toPlant, PLOTS[toPlant])
+
+# Second Goal for Phase 2 is to unlock Mazes - use linear farming to manually fertilize
+resetFarm()
+while num_unlocked(Unlocks.Mazes) == 0:
+
+	# Unlock Speed & Expand along the way
+	checkAndUnlock(Unlocks.Speed)
+	if checkAndUnlock(Unlocks.Expand):
+		PLOTS = assignEntitiesToQuads(entities)
+
+	# Unlock Yield along the way
+	checkAndUnlock(Unlocks.Watering)
+	checkAndUnlock(Unlocks.Fertilizer)
+	checkAndUnlock(Unlocks.Grass)
+	checkAndUnlock(Unlocks.Carrots)
+	checkAndUnlock(Unlocks.Trees)
+	checkAndUnlock(Unlocks.Pumpkins)
+
+	# Unlock Mazes when we can
+	checkAndUnlock(Unlocks.Mazes)
+
+	# Use linear farming to control fertlizer
+	for x in range(get_world_size()):
+		for y in range(get_world_size()):
+
 			if can_harvest():
 				harvest()
-				
-			toPlant = entities[quad % len(entities)]
+
+			toPlant = entities[x % len(entities)]
+
 			if toPlant == Entities.Bush:
 				plantTreeBush_(x, y)
-			elif toPlant == Entities.Pumpkin:
-				processPumpkinPlot(PLOTS[3])
-				# Skip the rest of the column
-				break
 			else:
 				plant_(toPlant)
 
+			if num_items(Items.Fertilizer) > 0:
+				use_item(Items.Fertilizer)
+			
+			move(North)
+		move(East)

@@ -1,7 +1,9 @@
 from _move_ import *
 from _plant_ import *
+from _farm_ import *
+from _unlocks_ import *
 
-moveTo((0,0))
+resetFarm()
 
 ####################
 # Phase 1
@@ -11,40 +13,24 @@ moveTo((0,0))
 
 entities = [Entities.Bush, Entities.Grass, Entities.Carrot]
 
-# Till the entire Farm - everything grows on soil
-for x in range(get_world_size()):
-	for y in range(get_world_size()):
-
-		if get_ground_type() != Grounds.Soil:
-			till()
-		
-		move(North)
-	move(East)
 
 # Goal for Phase 1 is to unlock Carrots, Trees, Pumpkins, and Sunflowers
 unlocked = 0
 while num_unlocked(Unlocks.Sunflowers) == 0 or num_unlocked(Unlocks.Pumpkins) == 0 or num_unlocked(Unlocks.Trees) == 0:
 	
-	# Unlock Speeds along the way
-	if num_items(Items.Wood) > 20:
-		# TODO Unlock Speed 2
-		pass
+	# Unlock Speed & Expand along the way
+	checkAndUnlock(Unlocks.Speed)
+	checkAndUnlock(Unlocks.Expand)
 
 	# Unlock Trees when we can
-	if num_items(Items.Carrot) > 70 and num_items(Items.Wood) > 50:
-		# TODO Unlock Trees
-		unlocked += 1
+	checkAndUnlock(Unlocks.Trees)
 
 	# Unlock Pumpkins when we can
-	if num_items(Items.Carrot) > 200 and num_items(Items.Wood) > 500:
-		# TODO Unlock Pumpkins
-		unlocked += 1
+	checkAndUnlock(Unlocks.Pumpkins)
 
 	# Unlock Sunflowers when we can
-	if num_items(Items.Carrot) > 500 and num_items(Items.Wood) > 50:
-		# TODO Unlock Water
-		# TODO Unlock Sunflower
-		unlocked += 1
+	checkAndUnlock(Unlocks.Watering)
+	checkAndUnlock(Unlocks.Sunflowers)
 
 	for x in range(get_world_size()):
 		for y in range(get_world_size()):

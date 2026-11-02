@@ -11,8 +11,8 @@ def waitForSunToGrow():
 
 # Harvest all sunflowers of a certain value in a plot
 def harvestAllOf(plot, value):
-    # plot: List of Tuples for coordinates (x, y)
-    # value: number from MIN to MAX sunflower value
+	# plot: List of Tuples for coordinates (x, y)
+	# value: number from MIN to MAX sunflower value
 
 	anyHarvested = False
 	for x, y in plot:
