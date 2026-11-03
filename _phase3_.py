@@ -2,6 +2,8 @@ from _move_ import *
 from _plant_ import *
 from _farm_ import *
 from _pumpkins_ import *
+from _sunflowers_ import *
+from _polycultre_ import *
 from _unlocks_ import *
 
 resetFarm()
@@ -42,6 +44,7 @@ while True:
 	for toPlant in PLOTS:
 		if toPlant == Entities.Pumpkin:
 			processPumpkinPlot(PLOTS[toPlant])
-
+		elif toPlant == Entities.Grass:
+			processPolyPlot(PLOTS[toPlant])
 		else:
 			plantPlot_(toPlant, PLOTS[toPlant])
