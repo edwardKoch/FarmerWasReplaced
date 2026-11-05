@@ -11,7 +11,7 @@ resetFarm()
 
 ####################
 # Phase 3
-# Unlock Multi-Drones
+# Unlock Multi-Drones & Dinos
 # Plot based planting with Mazes & Polyculture
 ####################
 
@@ -46,6 +46,8 @@ while num_unlocked(Unlocks.Megafarm) == 0:
 	# Plant Pumpkins if needed
 	if num_items(Items.Pumpkin) < 10000:
 		processPumpkinPlot(PLOTS[Entities.Pumpkin])
+	elif num_items(Items.Cactus) < 10000:
+		# TODO - Plant Cacti
 
 	# Plant Sunflowers if needed
 	if num_items(Items.Power) < 10000:
