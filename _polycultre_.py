@@ -25,21 +25,30 @@ def processPolyPlot(plot):
 		# Plant current entity
 		# until the companion is within the plot
 		# only try a certain number of times
-		count = len(plot)
-		while (newSpace not in plot and visited[newSpace] != True) or count <= 0:
+		count = len(plot) // 2
+		while count >= 0:
 			count -= 1
 			harvest()
 			plant(entity)
 			newEntity, newSpace = get_companion()
 
-		entity, space = newEntity, newSpace
-
-		# Check to see if all spaces have been visited
-		complete = True
-		for v in visited:
-			if not visited[v]:
-				complete = False
+			if (newSpace in plot and not visited[newSpace]):
 				break
+
+		# If unable to find a sutible spot, just harvest and be done
+		if count < 0:
+			break
+
+		else:
+
+			entity, space = newEntity, newSpace
+
+			# Check to see if all spaces have been visited
+			complete = True
+			for v in visited:
+				if not visited[v]:
+					complete = False
+					break
 
 	# Harvest the whole plot
 	for sq in plot:

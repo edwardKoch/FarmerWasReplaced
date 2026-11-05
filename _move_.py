@@ -31,3 +31,52 @@ def moveTo(coord):
 
 	for y in range(dY):
 		move(ns)
+
+
+# Track Relative Motion for Maze Solving
+DIRECTIONS = [North, East, South, West]
+DIRECTION = 0
+
+def getForward():
+	return DIRECTIONS[DIRECTION]
+	
+def getBackward():
+	return DIRECTIONS[(DIRECTION + 2) % 4]
+	
+def getRight():
+	return DIRECTIONS[(DIRECTION + 1) % 4]
+	
+def getLeft():
+	return DIRECTIONS[(DIRECTION - 1) % 4]
+
+def moveForward(n = 1, block = True):
+	success = True
+	for i in range(n):
+		success = success and move(getForward())
+	return success
+		
+def moveBackwards(n = 1, block = True):
+	success = True
+	for i in range(n):
+		success = success and move(getBackward())
+	return success
+		
+def moveRight(n = 1, block = True):
+	success = True
+	for i in range(n):
+		success = success and move(getRight())
+	return success
+
+def moveLeft(n = 1, block = True):
+	success = True
+	for i in range(n):
+		success = success and move(getLeft())
+	return success
+	
+def turnRight(n = 1):
+	global DIRECTION
+	DIRECTION = (DIRECTION + n) % 4
+	
+def turnLeft(n = 1):
+	global DIRECTION 
+	DIRECTION = (DIRECTION - n) % 4

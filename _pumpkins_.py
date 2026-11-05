@@ -26,6 +26,7 @@ def replaceDeadPumpkins(deads):
 
 def processPumpkinPlot(plot):
 	# Process Pumpkin Plot until harvested
+	# plot: List of Tuples for coordinates (x, y)
 
 	deads = []
 	# Plant first round of pumpkins

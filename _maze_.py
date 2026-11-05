@@ -1,0 +1,50 @@
+from _move_ import *
+
+
+def rightWallMethod():
+	# Follow the right wall until Treasure is found
+		
+	count = 0
+	while get_entity_type() != Entities.Treasure:
+		
+		# If somehow we are out of the maze
+		if get_entity_type() != Entities.Hedge:
+			break
+
+		# Follow the Right Wall
+		if can_move(getRight()):
+			turnRight()
+			moveForward()
+		elif can_move(getForward()):
+			moveForward()
+		else:
+			turnRight()
+			turnRight()
+
+	# Treasure was found
+	harvest()
+
+
+def createAndSolveMaze(x, y, size):
+	# Generate the Maze, Find the Treasure, harvest & Destroy Maze
+
+	moveTo((x, y))
+	# Clear the Square
+	harvest()
+
+	# Get cost of generating the maze
+	cost = size * get_cost(Entities.Hedge)[Items.Weird_Substance]
+
+	while num_items(Items.Weird_Substance) < cost:
+		if can_harvest():
+			harvest()
+			plant(Entities.Bush)
+			use_item(Items.Fertilizer)
+
+	# Generate the Maze
+	harvest()
+	plant(Entities.Bush)
+	use_item(Items.Weird_Substance, cost)
+
+	# Solve the Maze
+	rightWallMethod()
