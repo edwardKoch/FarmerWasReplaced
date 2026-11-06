@@ -54,3 +54,18 @@ def processPumpkinPlotMulti(plot):
 	
 	# Plant first round of Pumpkins
 	plantPlotMulti_(Entities.Pumpkin, plot)
+
+	deads = []
+	# Plant first round of pumpkins
+	for x, y in plot:
+		deads.append((x,y))
+
+
+	# Recursiveley replace pumpkins
+
+	deads = replaceDeadPumpkins(deads)
+	while len(deads) != 0:
+		deads = replaceDeadPumpkins(deads)
+
+	# harvest the giant pumpkin
+	harvest()

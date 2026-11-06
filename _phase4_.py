@@ -6,6 +6,7 @@ from _sunflowers_ import *
 from _polycultre_ import *
 from _cactus_ import *
 from _maze_ import *
+from _dinos_ import *
 from _unlocks_ import *
 
 resetFarm()
@@ -75,12 +76,12 @@ while num_unlocked(Unlocks.Leaderboard) == 0:
 	else:
 		processSunflowerPlotMulti(PLOTS[Entities.Sunflower])
 
-	worker = spawn_drone(processPumpkinPlot, PLOTS[Entities.Pumpkin])
+	worker = spawn_drone(processPumpkinPlotMulti, PLOTS[Entities.Pumpkin])
 	if worker != None:
 		workers.append(worker)
 	# If no workers available, process with main drone
 	else:
-		processPumpkinPlot(PLOTS[Entities.Pumpkin])
+		processPumpkinPlotMulti(PLOTS[Entities.Pumpkin])
 
 	# Do Polyculture with the 'main' drone to buy time
 	processPolyPlot(PLOTS[Entities.Grass])
@@ -91,38 +92,43 @@ while num_unlocked(Unlocks.Leaderboard) == 0:
 
 	# Run 4 Mazes
 	workers = []
-	numMaze = 4
-	worker = spawn_drone(createAndSolveMazes, 0, 0, dim // 2, numMaze)
-	if worker != None:
-		workers.append(worker)
-	# If no workers available, process with main drone
-	else:
-		createAndSolveMazes(0, 0, dim // 2, numMaze)
+	numMaze = num_drones()
+	mazeSize = dim // 2
 
-	worker = spawn_drone(createAndSolveMazes, 0, dim - 1, dim // 2, numMaze)
-	if worker != None:
-		workers.append(worker)
-	# If no workers available, process with main drone
-	else:
-		createAndSolveMazes(0, dim - 1, dim // 2, numMaze)
+	# Move to the middle spot so that the
+	# minions dont get in eachothers way
+	moveTo((mazeSize, mazeSize))
 
-	worker = spawn_drone(createAndSolveMazes, dim - 1, 0, dim // 2, numMaze)
+	worker = spawn_drone(createAndSolveMazesMulti, 0, 0, mazeSize, numMaze)
 	if worker != None:
 		workers.append(worker)
 	# If no workers available, process with main drone
 	else:
-		createAndSolveMazes(dim - 1, 0, dim // 2, numMaze)
+		createAndSolveMazesMulti(0, 0, mazeSize, numMaze)
 
-	worker = spawn_drone(createAndSolveMazes, dim - 1, dim - 1, dim // 2, numMaze)
+	worker = spawn_drone(createAndSolveMazesMulti, 0, dim - 1, mazeSize, numMaze)
 	if worker != None:
 		workers.append(worker)
 	# If no workers available, process with main drone
 	else:
-		createAndSolveMazes(dim - 1, dim - 1, dim // 2, numMaze)
+		createAndSolveMazesMulti(0, dim - 1, mazeSize, numMaze)
+
+	worker = spawn_drone(createAndSolveMazesMulti, dim - 1, 0, mazeSize, numMaze)
+	if worker != None:
+		workers.append(worker)
+	# If no workers available, process with main drone
+	else:
+		createAndSolveMazesMulti(dim - 1, 0, mazeSize, numMaze)
+
+	# Do the last maze with the 'main' drone to maximize usage
+	createAndSolveMazesMulti(dim - 1, dim - 1, mazeSize, numMaze)
 
 	for minion in workers:
 		wait_for(minion)
 	
-	# Run 1 Giant Dino
-	# TODO - Dino
-	resetFarm()
+	# Run 1 Giant Dino - if needed for unlock, because it takes forever to run
+	if num_items(Items.Bone) < get_cost(Unlocks.Leaderboard)[Items.Bone]:
+		dynamicHamiltonSnake()
+	
+	# Till the whole farm to prepare for the next cycle
+	# TODO
