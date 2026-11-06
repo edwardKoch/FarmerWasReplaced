@@ -18,9 +18,8 @@ def processPolyPlot(plot):
 		moveTo(space)
 		visited[space] = True
 		harvest()
-		plant(entity)
-		
-		newEntity, newSpace = get_companion()
+		if plant(entity):	
+			newEntity, newSpace = get_companion()
 		
 		# Plant current entity
 		# until the companion is within the plot
@@ -29,8 +28,8 @@ def processPolyPlot(plot):
 		while count >= 0:
 			count -= 1
 			harvest()
-			plant(entity)
-			newEntity, newSpace = get_companion()
+			if plant(entity):
+				newEntity, newSpace = get_companion()
 
 			if (newSpace in plot and not visited[newSpace]):
 				break

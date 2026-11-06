@@ -31,15 +31,19 @@ def createAndSolveMaze(x, y, size):
 	moveTo((x, y))
 	# Clear the Square
 	harvest()
+	plant(Entities.Tree)
+	use_item(Items.Fertilizer)
+	use_item(Items.Water)
 
 	# Get cost of generating the maze
 	cost = size * get_cost(Entities.Hedge)[Items.Weird_Substance]
 
-	while num_items(Items.Weird_Substance) < cost:
+	while num_items(Items.Weird_Substance) < cost * 4:
 		if can_harvest():
 			harvest()
-			plant(Entities.Bush)
+			plant(Entities.Grass)
 			use_item(Items.Fertilizer)
+			use_item(Items.Water)
 
 	# Generate the Maze
 	harvest()
@@ -48,3 +52,12 @@ def createAndSolveMaze(x, y, size):
 
 	# Solve the Maze
 	rightWallMethod()
+
+
+def createAndSolveMazes(x, y, size, num):
+	# Generate and solve a number of mazes
+
+	for i in range(num):
+		createAndSolveMaze(x, y, size)
+
+# TODO - Make MultiDrone Maze solver

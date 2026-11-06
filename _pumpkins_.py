@@ -1,4 +1,6 @@
 from _move_ import *
+from _algo_ import *
+from _plant_ import *
 
 def waitForPumpToGrow():
 	# Wait until a space is either grown or a dead pumpkin
@@ -45,3 +47,10 @@ def processPumpkinPlot(plot):
 
 	# harvest the giant pumpkin
 	harvest()
+
+def processPumpkinPlotMulti(plot):
+	# Process Pumpkin Plot until harvested - using multiple drones
+	# plot: List of Tuples for coordinates (x, y)
+	
+	# Plant first round of Pumpkins
+	plantPlotMulti_(Entities.Pumpkin, plot)

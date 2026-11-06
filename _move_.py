@@ -80,3 +80,27 @@ def turnRight(n = 1):
 def turnLeft(n = 1):
 	global DIRECTION 
 	DIRECTION = (DIRECTION - n) % 4
+
+
+def getDir(p1, p2):
+	# Get the direction from P1 -> P2
+	# P1, P2: 2 Squares in the same row OR col
+	# If in different rows and cols, return North
+
+	x1 = p1[0]
+	y1 = p1[1]
+
+	x2 = p2[0]
+	y2 = p2[1]
+
+	if x1 == x2:
+		if y1 < y2:
+			return North
+		return South
+
+	if y1 == y2:
+		if x1 < x2:
+			return East
+		return West		
+
+	return North

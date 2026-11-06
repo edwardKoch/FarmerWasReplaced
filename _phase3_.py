@@ -4,10 +4,17 @@ from _farm_ import *
 from _pumpkins_ import *
 from _sunflowers_ import *
 from _polycultre_ import *
+from _cactus_ import *
 from _maze_ import *
 from _unlocks_ import *
 
 resetFarm()
+
+WholeFarm = []
+dim = get_world_size()
+for x in range(dim):
+	for y in range(dim):
+		WholeFarm.append((x, y))
 
 ####################
 # Phase 3
@@ -21,7 +28,7 @@ entities = [Entities.Bush, Entities.Grass, Entities.Pumpkin, Entities.Sunflower]
 
 PLOTS = assignEntitiesToQuads(entities)
 
-while num_unlocked(Unlocks.Megafarm) == 0:
+while num_unlocked(Unlocks.Megafarm) == 0 or num_unlocked(Unlocks.Dinosaurs) == 0:
 	# Unlock Speed & Expand along the way
 	checkAndUnlock(Unlocks.Speed)
 	if checkAndUnlock(Unlocks.Expand):
@@ -42,16 +49,19 @@ while num_unlocked(Unlocks.Megafarm) == 0:
 
 	# Unlock Megafarms when we can
 	checkAndUnlock(Unlocks.Megafarm)
+	checkAndUnlock(Unlocks.Dinosaurs)
 
 	# Plant Pumpkins if needed
 	if num_items(Items.Pumpkin) < 10000:
-		processPumpkinPlot(PLOTS[Entities.Pumpkin])
-	elif num_items(Items.Cactus) < 10000:
-		# TODO - Plant Cacti
+		processPumpkinPlot(WholeFarm)
+
+	# Plant Cacti if needed
+	if num_items(Items.Cactus) < 10000:
+		processCactiPlot(WholeFarm)
 
 	# Plant Sunflowers if needed
 	if num_items(Items.Power) < 10000:
-		processSunflowerPlot(PLOTS[Entities.Sunflower])
+		processSunflowerPlot(PLOTS[Entities.Pumpkin])
 
 	# Run a Polyculture Plot
 	processPolyPlot(PLOTS[Entities.Grass])
