@@ -33,6 +33,7 @@ while num_unlocked(Unlocks.Megafarm) == 0 or num_unlocked(Unlocks.Dinosaurs) == 
 	checkAndUnlock(Unlocks.Speed)
 	if checkAndUnlock(Unlocks.Expand):
 		PLOTS = assignEntitiesToQuads(entities)
+		resetFarm()
 
 	# Unlock Resources along the way
 	checkAndUnlock(Unlocks.Watering)

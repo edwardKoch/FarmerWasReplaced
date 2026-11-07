@@ -56,16 +56,25 @@ def processPumpkinPlotMulti(plot):
 	plantPlotMulti_(Entities.Pumpkin, plot)
 
 	deads = []
-	# Plant first round of pumpkins
 	for x, y in plot:
 		deads.append((x,y))
 
-
 	# Recursiveley replace pumpkins
+	Rows, Cols = plotToRowsCols(deads)
 
-	deads = replaceDeadPumpkins(deads)
+	def spawn(line):
+		return spawn_drone(replaceDeadPumpkins, line)
+
+	def process(line):
+		return replaceDeadPumpkins(line)
+
 	while len(deads) != 0:
-		deads = replaceDeadPumpkins(deads)
+		deadResults = processPerLine(Rows, spawn, process)
+		deads = []
+		for xy in deadResults:
+			deads += deadResults[xy]
+
+		Rows, Cols = plotToRowsCols(deads)
 
 	# harvest the giant pumpkin
 	harvest()

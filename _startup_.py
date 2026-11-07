@@ -12,11 +12,13 @@ clear()
 # Get 20 Hay for Speed 1
 while num_items(Items.Hay) < 20:
 	harvest()
+	do_a_flip()
 checkAndUnlock(Unlocks.Speed)
 
 # Get 30 Hay for Expand 1 (1x3)
 while num_items(Items.Hay) < 30:
 	harvest()
+	do_a_flip()
 checkAndUnlock(Unlocks.Expand)
 
 # Get 50 Hay for Planting (Bush)

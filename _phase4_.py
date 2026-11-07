@@ -9,7 +9,7 @@ from _maze_ import *
 from _dinos_ import *
 from _unlocks_ import *
 
-resetFarm()
+resetFarmMulti()
 
 ####################
 # Phase 4
@@ -28,6 +28,9 @@ for x in range(dim):
 		WholeFarm.append((x, y))
 
 PLOTS = assignEntitiesToQuads(entities)
+
+# Track how many bones we will need
+bonesNeeded = get_cost(Unlocks.Leaderboard)[Items.Bone]
 
 while num_unlocked(Unlocks.Leaderboard) == 0:
 	# Unlock Speed & Expand along the way
@@ -92,7 +95,7 @@ while num_unlocked(Unlocks.Leaderboard) == 0:
 
 	# Run 4 Mazes
 	workers = []
-	numMaze = num_drones()
+	numMaze = max_drones()
 	mazeSize = dim // 2
 
 	# Move to the middle spot so that the
@@ -127,8 +130,8 @@ while num_unlocked(Unlocks.Leaderboard) == 0:
 		wait_for(minion)
 	
 	# Run 1 Giant Dino - if needed for unlock, because it takes forever to run
-	if num_items(Items.Bone) < get_cost(Unlocks.Leaderboard)[Items.Bone]:
+	if num_items(Items.Bone) < bonesNeeded:
 		dynamicHamiltonSnake()
 	
 	# Till the whole farm to prepare for the next cycle
-	# TODO
+	resetFarmMulti()

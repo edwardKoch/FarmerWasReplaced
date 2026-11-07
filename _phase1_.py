@@ -20,7 +20,8 @@ while num_unlocked(Unlocks.Sunflowers) == 0 or num_unlocked(Unlocks.Pumpkins) ==
 	
 	# Unlock Speed & Expand along the way
 	checkAndUnlock(Unlocks.Speed)
-	checkAndUnlock(Unlocks.Expand)
+	if checkAndUnlock(Unlocks.Expand):
+		resetFarm()
 
 	# Unlock Trees when we can
 	checkAndUnlock(Unlocks.Trees)

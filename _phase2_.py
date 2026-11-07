@@ -26,6 +26,7 @@ while num_unlocked(Unlocks.Polyculture) == 0 or num_unlocked(Unlocks.Cactus) == 
 	checkAndUnlock(Unlocks.Speed)
 	if checkAndUnlock(Unlocks.Expand):
 		PLOTS = assignEntitiesToQuads(entities)
+		resetFarm()
 
 	# Unlock Yield along the way
 	checkAndUnlock(Unlocks.Watering)

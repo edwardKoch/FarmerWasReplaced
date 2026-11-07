@@ -24,7 +24,7 @@ def processPolyPlot(plot):
 		# Plant current entity
 		# until the companion is within the plot
 		# only try a certain number of times
-		count = len(plot) // 2
+		count = len(plot) // 4
 		while count >= 0:
 			count -= 1
 			harvest()

@@ -1,4 +1,5 @@
 from _move_ import *
+from _algo_ import *
 
 def resetFarm():
 	moveTo((0,0))
@@ -11,9 +12,39 @@ def resetFarm():
 			harvest()
 			if get_ground_type() != Grounds.Soil:
 				till()
-			
+		
 			move(North)
 		move(East)
+
+def resetFarmMulti():
+	# Till the entire Farm - everything grows on soil
+
+	WholeFarm = []
+	dim = get_world_size()
+	for x in range(dim):
+		for y in range(dim):
+			WholeFarm.append((x, y))
+
+	# Split plot into Rows & cols
+	Rows, Cols = plotToRowsCols(WholeFarm)
+
+	def resetFarmCol(plot):
+		for x, y in plot:
+			moveTo((x,y))
+			harvest()
+			if get_ground_type() != Grounds.Soil:
+				till()
+
+	def spawn(line):
+		return spawn_drone(resetFarmCol, line)
+
+	def process(line):
+		return resetFarmCol(line)
+
+	clear()
+
+	# Till the entire Farm - everything grows on soil
+	processPerLine(Rows, spawn, process)
 
 def assignEntitiesToQuads(entities):
 	# Assigns a list of coordinates to each of 4 entities

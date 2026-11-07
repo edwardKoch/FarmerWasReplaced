@@ -4,7 +4,6 @@ from _move_ import *
 def rightWallMethod():
 	# Follow the right wall until Treasure is found
 		
-	count = 0
 	while get_entity_type() != Entities.Treasure:
 		
 		# If somehow we are out of the maze
@@ -28,7 +27,6 @@ def rightWallMethod():
 def leftWallMethod():
 	# Follow the left wall until Treasure
 		
-	count = 0
 	while get_entity_type() != Entities.Treasure:
 		
 		# If somehow we are out of the maze
@@ -76,6 +74,74 @@ def createAndSolveMaze(x, y, size):
 	# Solve the Maze
 	rightWallMethod()
 
+def createAndSolveMazes(x, y, size, num):
+	# Generate and solve a number of mazes
+
+	for i in range(num):
+		createAndSolveMaze(x, y, size)
+
+
+def rightWallMethodMulti():
+	# Follow the right wall until Treasure is found
+	# Spawn helpers every 'get_world_size()' steps
+		
+	count = 0
+	helpCount = get_world_size()
+	minion = None
+	while get_entity_type() != Entities.Treasure:
+		
+		# If somehow we are out of the maze
+		if get_entity_type() != Entities.Hedge:
+			break
+
+		# Follow the Right Wall
+		if can_move(getRight()):
+			turnRight()
+			moveForward()
+		elif can_move(getForward()):
+			moveForward()
+		else:
+			turnRight()
+			turnRight()
+
+		count += 1
+		if count > helpCount and minion == None:
+			minion = spawn_drone(leftWallMethodMulti)
+
+	# Treasure was found
+	harvest()
+
+
+def leftWallMethodMulti():
+	# Follow the left wall until Treasure
+	# Spawn helpers every 'get_world_size()' steps
+		
+	count = 0
+	helpCount = get_world_size()
+	minion = None
+	while get_entity_type() != Entities.Treasure:
+		
+		# If somehow we are out of the maze
+		if get_entity_type() != Entities.Hedge:
+			break
+
+		# Follow the Left Wall
+		if can_move(getLeft()):
+			turnLeft()
+			moveForward()
+		elif can_move(getForward()):
+			moveForward()
+		else:
+			turnLeft()
+			turnLeft()
+
+		count += 1
+		if count > helpCount and minion == None:
+			minion = spawn_drone(rightWallMethodMulti)
+
+	# Treasure was found
+	harvest()
+
 def createAndSolveMazeMulti(x, y, size):
 	# Generate the Maze, Find the Treasure, harvest & Destroy Maze
 	# Use multiple Drones
@@ -103,14 +169,8 @@ def createAndSolveMazeMulti(x, y, size):
 	use_item(Items.Weird_Substance, cost)
 
 	# Solve the Maze
-	spawn_drone(leftWallMethod)
-	rightWallMethod()
-
-def createAndSolveMazes(x, y, size, num):
-	# Generate and solve a number of mazes
-
-	for i in range(num):
-		createAndSolveMaze(x, y, size)
+	spawn_drone(leftWallMethodMulti)
+	rightWallMethodMulti()
 
 
 def createAndSolveMazesMulti(x, y, size, num):
