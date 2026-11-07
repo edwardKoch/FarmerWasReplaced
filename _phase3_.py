@@ -70,3 +70,6 @@ while num_unlocked(Unlocks.Megafarm) == 0 or num_unlocked(Unlocks.Dinosaurs) == 
 	# Run 4 Mazes
 	for i in range(4):
 		createAndSolveMaze(0, 0, get_world_size() // 2)
+
+	# Ensure farm is tilled for next pass
+	resetFarm()

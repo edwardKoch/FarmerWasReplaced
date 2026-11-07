@@ -64,6 +64,9 @@ def processPerLine(Lines, spawnFcn, processFcn):
 	# spawnFcn: spawn_drone with correct arguments, takes in a single line
 	# processFcn: some fcn() with the correct arguments, takes in a single line
 	# RETURNS: dict of x|y value to result of processFcn
+
+	if Lines == {}:
+		return {}
 	
 	# Track workers as a (ID, xy) pair
 	workers = []
